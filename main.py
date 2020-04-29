@@ -65,6 +65,12 @@ class MyGame(arcade.Window):
 
         # Set up the player info
         self.player_sprite = None
+        
+        # Track the current state of what key is pressed
+        self.left_pressed = False
+        self.right_pressed = False
+        self.up_pressed = False
+        self.down_pressed = False
 
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
@@ -95,33 +101,45 @@ class MyGame(arcade.Window):
     def on_update(self, delta_time):
         """ Movement and game logic """
 
-        # Call update on all sprites (The sprites don't do much in this
-        # example though.)
+        # Call update on all sprites
         self.player_list.update()
+        
+        # Calculate speed based on the keys pressed
+        self.player_sprite.change_x = 0
+        self.player_sprite.change_y = 0
+
+        if self.up_pressed and not self.down_pressed:
+            self.player_sprite.change_y = MOVEMENT_SPEED
+        elif self.down_pressed and not self.up_pressed:
+            self.player_sprite.change_y = -MOVEMENT_SPEED
+        if self.left_pressed and not self.right_pressed:
+            self.player_sprite.change_x = -MOVEMENT_SPEED
+        elif self.right_pressed and not self.left_pressed:
+            self.player_sprite.change_x = MOVEMENT_SPEED
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed. """
 
         if key == arcade.key.UP:
-            self.player_sprite.change_y = MOVEMENT_SPEED
+            self.up_pressed = True
         elif key == arcade.key.DOWN:
-            self.player_sprite.change_y = -MOVEMENT_SPEED
+            self.down_pressed = True
         elif key == arcade.key.LEFT:
-            self.player_sprite.change_x = -MOVEMENT_SPEED
+            self.left_pressed = True
         elif key == arcade.key.RIGHT:
-            self.player_sprite.change_x = MOVEMENT_SPEED
+            self.right_pressed = True
         
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
 
-        if  key == arcade.key.UP:
-            self.player_sprite.change_y = 0
+        if key == arcade.key.UP:
+            self.up_pressed = False
         elif key == arcade.key.DOWN:
-            self.player_sprite.change_y = 0
+            self.down_pressed = False
         elif key == arcade.key.LEFT:
-            self.player_sprite.change_x = 0
+            self.left_pressed = False
         elif key == arcade.key.RIGHT:
-            self.player_sprite.change_x = 0
+            self.right_pressed = False
             
         
         
