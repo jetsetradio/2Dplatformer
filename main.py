@@ -113,7 +113,8 @@ class MyGame(arcade.Window):
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key. """
-    print key
+
+        print(key)
         if  key == arcade.key.UP:
             self.player_sprite.change_y = 0
         elif key == arcade.key.DOWN:
